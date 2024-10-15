@@ -12,6 +12,21 @@ text_to_html = {
     "text_type_image" : ("img", {"url": "src", "text": "alt"}),
 }
 
+'''
+Converts a raw string of markdown-flavored text into a list of TextNode objects
+'''
+def text_to_textnodes(text):
+   
+    first_node = TextNode(text, "text_type_text")
+    result = split_nodes_image([first_node])
+    result = split_nodes_link(result)
+    result = split_nodes_delimiter(result, "`", "text_type_code")
+    result = split_nodes_delimiter(result,"**", "text_type_bold")
+    result = split_nodes_delimiter(result, "*", "text_type_italic")
+
+    return result
+
+
 # converts a TextNode to an HTMLNode (LeafNode)
 def text_node_to_html_node(text_node):
     newNode, tag = None, None
@@ -58,16 +73,18 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
     for oldNode in old_nodes:
         oldTextType = oldNode.text_type
+        oldURL = oldNode.url
         # split it based on the delimiter
         chunksOfText = oldNode.text.split(delimiter)
 
         # add every other one to a original vs new text type
         old = True
+
         for chunk in chunksOfText:
             if old:
-                result.append(TextNode(chunk, oldTextType))
+                result.append(TextNode(chunk, oldTextType, oldURL))
             else:
-                result.append(TextNode(chunk, text_type))
+                result.append(TextNode(chunk, text_type, oldURL))
             old = not old
     return result
 

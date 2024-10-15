@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode
-import util
+import util_inline
 
 class TestUtil(unittest.TestCase):
     # ----------- text_node_to_html_node() ----------- #
@@ -9,7 +9,7 @@ class TestUtil(unittest.TestCase):
         expected = "Text Test"
 
         textNode = TextNode("Text Test", "text_type_text", None)
-        new_node = util.text_node_to_html_node(textNode)
+        new_node = util_inline.text_node_to_html_node(textNode)
         actual = new_node.to_html()
 
         self.assertEqual(expected, actual)
@@ -18,7 +18,7 @@ class TestUtil(unittest.TestCase):
         expected = "<b>Bold Test</b>"
 
         textNode = TextNode("Bold Test", "text_type_bold", None)
-        new_node = util.text_node_to_html_node(textNode)
+        new_node = util_inline.text_node_to_html_node(textNode)
         actual = new_node.to_html()
 
         self.assertEqual(expected, actual)
@@ -27,7 +27,7 @@ class TestUtil(unittest.TestCase):
         expected = "<i>Italic Test</i>"
 
         textNode = TextNode("Italic Test", "text_type_italic", None)
-        new_node = util.text_node_to_html_node(textNode)
+        new_node = util_inline.text_node_to_html_node(textNode)
         actual = new_node.to_html()
 
         self.assertEqual(expected, actual)
@@ -36,7 +36,7 @@ class TestUtil(unittest.TestCase):
         expected = "<code>Code Test</code>"
 
         textNode = TextNode("Code Test", "text_type_code", None)
-        new_node = util.text_node_to_html_node(textNode)
+        new_node = util_inline.text_node_to_html_node(textNode)
         actual = new_node.to_html()
 
         self.assertEqual(expected, actual)
@@ -45,7 +45,7 @@ class TestUtil(unittest.TestCase):
         expected = "<a href=\"https://google.com\">Link alt text!</a>"
 
         textNode = TextNode("Link alt text!", "text_type_link", "https://google.com")
-        new_node = util.text_node_to_html_node(textNode)
+        new_node = util_inline.text_node_to_html_node(textNode)
         actual = new_node.to_html()
 
         self.assertEqual(expected, actual)
@@ -54,7 +54,7 @@ class TestUtil(unittest.TestCase):
         expected = "<img src=\"https://creazilla.com/media/png-image/15594597/cat\" alt=\"Image alt text!\"></img>"
 
         textNode = TextNode("Image alt text!", "text_type_image", "https://creazilla.com/media/png-image/15594597/cat")
-        new_node = util.text_node_to_html_node(textNode)
+        new_node = util_inline.text_node_to_html_node(textNode)
         actual = new_node.to_html()
 
         self.assertEqual(expected, actual)
@@ -68,7 +68,7 @@ class TestUtil(unittest.TestCase):
             ]
 
         node = TextNode("This is text with a `code block` word", "text_type_text")
-        actual = util.split_nodes_delimiter([node], "`", "text_type_code")
+        actual = util_inline.split_nodes_delimiter([node], "`", "text_type_code")
         self.assertEqual(expected, actual)
 
     def test_split_node_italic(self):
@@ -79,7 +79,7 @@ class TestUtil(unittest.TestCase):
             ]
 
         node = TextNode("This is text with an *italic block* word", "text_type_text")
-        actual = util.split_nodes_delimiter([node], "*", "text_type_italic")
+        actual = util_inline.split_nodes_delimiter([node], "*", "text_type_italic")
         self.assertEqual(expected, actual)
 
     def test_split_node_bold(self):
@@ -90,7 +90,7 @@ class TestUtil(unittest.TestCase):
             ]
 
         node = TextNode("This is text with a **bold block** word", "text_type_italic")
-        actual = util.split_nodes_delimiter([node], "**", "text_type_bold")
+        actual = util_inline.split_nodes_delimiter([node], "**", "text_type_bold")
         self.assertEqual(expected, actual)
 
     # ----------- extract_markdown_images() ----------- #
@@ -99,14 +99,14 @@ class TestUtil(unittest.TestCase):
         expected = [('snoopy', 'https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png'), ('kirby', 'https://kirby.nintendo.com/assets/img/about/characters-kirby.png')]
 
         text = "This is text with a ![snoopy](https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png) and ![kirby](https://kirby.nintendo.com/assets/img/about/characters-kirby.png) and a [link!](https://www.wikipedia.org/)"
-        actual = util.extract_markdown_images(text)
+        actual = util_inline.extract_markdown_images(text)
         self.assertEqual(expected, actual)
 
     def test_extract_markdown_images_empty(self):
         expected = []
 
         text = "This is text with no images"
-        actual = util.extract_markdown_images(text)
+        actual = util_inline.extract_markdown_images(text)
         self.assertEqual(expected, actual)
 
     # ----------- extract_markdown_links() ----------- #
@@ -115,14 +115,14 @@ class TestUtil(unittest.TestCase):
         expected = [('wikipedia', 'https://www.wikipedia.org/'), ('bulbapedia', 'https://bulbapedia.bulbagarden.net/wiki/Main_Page')]
 
         text = "This is text with an image ![snoopy](https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png) and links to [wikipedia](https://www.wikipedia.org/) and [bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Main_Page)!"
-        actual = util.extract_markdown_links(text)
+        actual = util_inline.extract_markdown_links(text)
         self.assertEqual(expected, actual)
 
     def test_extract_markdown_links_empty(self):
         expected = []
 
         text = "This is text with no links"
-        actual = util.extract_markdown_links(text)
+        actual = util_inline.extract_markdown_links(text)
         self.assertEqual(expected, actual)
 
     # ----------- split_nodes_image() ----------- #
@@ -145,7 +145,7 @@ class TestUtil(unittest.TestCase):
             "This is text with a ![snoopy2](https://test2.png) and ![kirby](https://test2.png), yay!",
             "text_type_text"
         )
-        actual = util.split_nodes_image([node, node2])
+        actual = util_inline.split_nodes_image([node, node2])
         self.assertEqual(expected, actual)
 
     def test_splits_images_ending_image(self):
@@ -158,7 +158,7 @@ class TestUtil(unittest.TestCase):
             "This is text ending with a ![snoopy](https://test.png)",
             "text_type_text"
         )
-        actual = util.split_nodes_image([node])
+        actual = util_inline.split_nodes_image([node])
         self.assertEqual(expected, actual)
 
     def test_returns_original_if_no_images(self):
@@ -170,7 +170,7 @@ class TestUtil(unittest.TestCase):
             "This is text with no images",
             "text_type_text"
         )
-        actual = util.split_nodes_image([node])
+        actual = util_inline.split_nodes_image([node])
         self.assertEqual(expected, actual)
 
     def test_doesnt_append_empty_text_image(self):
@@ -188,7 +188,7 @@ class TestUtil(unittest.TestCase):
             "text_type_text"
         )
 
-        actual = util.split_nodes_image([node, node2])
+        actual = util_inline.split_nodes_image([node, node2])
         self.assertEqual(expected, actual)
 
     # ----------- split_nodes_link() ----------- #
@@ -206,7 +206,7 @@ class TestUtil(unittest.TestCase):
             "text_type_text",
         )
 
-        actual = util.split_nodes_link([node])
+        actual = util_inline.split_nodes_link([node])
         self.assertEqual(expected, actual)
 
     def test_splits_link_ending_link(self):
@@ -219,7 +219,7 @@ class TestUtil(unittest.TestCase):
             "This is text ending with a [link](https://www.boot.dev)",
             "text_type_text"
         )
-        actual = util.split_nodes_link([node])
+        actual = util_inline.split_nodes_link([node])
         self.assertEqual(expected, actual)
 
     def test_returns_original_if_no_links(self):
@@ -231,7 +231,7 @@ class TestUtil(unittest.TestCase):
             "This is text with no links",
             "text_type_text"
         )
-        actual = util.split_nodes_link([node])
+        actual = util_inline.split_nodes_link([node])
         self.assertEqual(expected, actual)
 
     def test_doesnt_append_empty_text_link(self):
@@ -249,9 +249,30 @@ class TestUtil(unittest.TestCase):
             "text_type_text"
         )
 
-        actual = util.split_nodes_link([node, node2])
+        actual = util_inline.split_nodes_link([node, node2])
 
         self.assertEqual(expected, actual)
 
+    # ----------- text_to_textnodes() ----------- #
+    def test_text_to_textnode_all(self):
+        expected = [
+            TextNode("This is ", "text_type_text"),
+            TextNode("text", "text_type_bold"),
+            TextNode(" with an ", "text_type_text"),
+            TextNode("italic", "text_type_italic"),
+            TextNode(" word and a ", "text_type_text"),
+            TextNode("code block", "text_type_code"),
+            TextNode(" and an ", "text_type_text"),
+            TextNode("obi wan image", "text_type_image", "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", "text_type_text"),
+            TextNode("link", "text_type_link", "https://boot.dev"),
+        ]
+
+        text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+
+        actual = util_inline.text_to_textnodes(text)
+        self.assertEqual(expected, actual)
+
+  
 if __name__ == "__main__":
     unittest.main()
