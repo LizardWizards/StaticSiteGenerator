@@ -10,17 +10,6 @@ class ParentNode(HTMLNode):
         
         if self.children == None:
             raise ValueError("No children provided")
-        
-        '''
-        add the tag
-
-        for each child node:
-            get the child nodes' html version
-            add it to our string
-        
-        
-        add the closing tag
-        '''
 
         tag = f"<{self.tag}>"
         
@@ -28,7 +17,5 @@ class ParentNode(HTMLNode):
             tag += child.to_html()
 
         tag += f"</{self.tag}>"
-        print(tag)
-
         
         return tag

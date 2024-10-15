@@ -1,6 +1,8 @@
 import unittest
 
 from textnode import TextNode
+from htmlnode import HTMLNode
+from parentnode import ParentNode
 import util_blocks
 
 class TestUtil(unittest.TestCase):
@@ -100,6 +102,23 @@ class TestUtil(unittest.TestCase):
         text = "1. This is an\n2. ordered list\n3. with multiple lines"
         
         actual = util_blocks.block_to_block_type(text)
+
+        self.assertEqual(expected, actual)
+
+    # ----------- markdown_to_html_node() ----------- #
+    def test_markdown_to_html_node_heading(self):
+        expected = ParentNode("div", children=[    
+            HTMLNode("h1", "h1 Heading 8-)", None, None),
+            HTMLNode("h2", "h2 Heading", None, None),
+            HTMLNode("h3", "h3 Heading", None, None),
+            HTMLNode("h4", "h4 Heading", None, None),
+            HTMLNode("h5", "h5 Heading", None, None),
+            HTMLNode("h6", "h6 Heading", None, None),
+        ])
+
+        text = "# h1 Heading 8-)\n\n## h2 Heading\n\n### h3 Heading\n\n#### h4 Heading\n\n##### h5 Heading\n\n###### h6 Heading"
+
+        actual = util_blocks.markdown_to_html_node(text)
 
         self.assertEqual(expected, actual)
 

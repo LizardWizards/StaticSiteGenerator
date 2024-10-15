@@ -100,7 +100,6 @@ def split_nodes_image(old_nodes):
 
         images = extract_markdown_images(originalText)
         #[(alt text, url), (alt text, url), ...]
-
         remaining_text = originalText
         textSections = []
 
@@ -135,8 +134,8 @@ def split_nodes_link(old_nodes):
         if originalText == "":
             continue
         
-        links = extract_markdown_links(originalText)
 
+        links = extract_markdown_links(originalText)
         remaining_text = originalText
         textSections = []
 
@@ -180,6 +179,8 @@ def extract_markdown_images(text):
 takes raw markdown text and returns a list of tuples containing the alt text and URL of any markdown links
 '''
 def extract_markdown_links(text):
+    startingLink = re.findall(r"^\[(.*?)\]\((.*?)\)", text)
     matches = re.findall(r"[^!]\[(.*?)\]\((.*?)\)", text)
-    return matches
+
+    return startingLink + matches
     

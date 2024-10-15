@@ -1,7 +1,28 @@
 from leafnode import LeafNode
 from textnode import TextNode
+from htmlnode import HTMLNode
+from parentnode import ParentNode
+from htmlnode_factory import HTMLNodeFactory
 import re
 
+# converts a full markdown document into a single HTMLNode.
+# That single HTMLNode contains many child HTMLNode objects representing the nested elements.
+def markdown_to_html_node(markdown):
+
+    blocks = markdown_to_blocks(markdown)
+    childNodes = []
+    for block in blocks:
+        type = block_to_block_type(block)
+
+        newNode = HTMLNodeFactory.create_node(type, block)
+
+        childNodes.append(newNode)
+    
+    divNode = ParentNode("div", children=childNodes)
+    return divNode
+
+
+# separates lines of markdown into blocks
 def markdown_to_blocks(markdown):
     blocks = []
     chunks = markdown.split("\n\n")
@@ -11,6 +32,7 @@ def markdown_to_blocks(markdown):
 
     return blocks
 
+# returns the type that a block is
 def block_to_block_type(block):
     type = "paragraph"
     if is_heading(block):

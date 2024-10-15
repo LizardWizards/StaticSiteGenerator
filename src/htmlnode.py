@@ -12,6 +12,16 @@ class HTMLNode:
         self.children = children
         self.props = props
 
+    # returns True if all of the properties of two TextNode objects are equal
+    def __eq__(self, nodeB):
+        if self.tag == nodeB.tag and self.value == nodeB.value and self.children == nodeB.children and self.props == nodeB.props:
+            return True
+        return False
+    
+    def __repr__(self):
+        stringRepresentation = f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
+        return stringRepresentation
+    
     # implemented by child classes to render themselves in html
     def to_html(self):
         raise NotImplementedError
