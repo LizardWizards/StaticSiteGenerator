@@ -151,16 +151,29 @@ class TestUtil(unittest.TestCase):
     def test_markdown_to_html_node_unordred_list(self):
         expected = HTMLNode("div", children=[    
             HTMLNode("ul", children=[
-                HTMLNode("li", "something", None, None),
-                HTMLNode("li", "something else", None, None),
-                HTMLNode("li", "another thing", None, None)
+                HTMLNode("li", "first", None, None),
+                HTMLNode("li", None, [
+                    HTMLNode(None, "second ", None),
+                    HTMLNode("i", "italic", None,)
+                ], None),
+                HTMLNode("li", "third", None, None)
             ])
         ])
 
-        text = "- something\n- something else\n* another thing"
+        text = "- first\n- second *italic*\n* third"
 
         actual = util_blocks.markdown_to_html_node(text)
 
+        '''
+        HTMLNode(ul, None, [
+            HTMLNode(li, first, None, None), 
+            HTMLNode(li, None, [
+                HTMLNode(None, second , None, None), 
+                HTMLNode(i, italic, None, None)
+            ], None), 
+            HTMLNode(li, third, None, None)], 
+            None)
+        '''
         self.assertEqual(expected, actual)
 
     def test_markdown_to_html_node_code(self):

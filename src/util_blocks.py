@@ -12,6 +12,8 @@ def markdown_to_html_node(markdown):
     childNodes = []
     for block in blocks:
         type = block_to_block_type(block)
+        print("block:")
+        print(block)
         if block != "" and block != "\n":
             newNode = HTMLNodeFactory.create_node(type, block)
             childNodes.append(newNode)

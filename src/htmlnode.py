@@ -14,7 +14,11 @@ class HTMLNode:
 
     # returns True if all of the properties of two TextNode objects are equal
     def __eq__(self, nodeB):
-        if self.tag == nodeB.tag and self.value == nodeB.value and self.children == nodeB.children and self.props == nodeB.props:
+        if self.tag == nodeB.tag and self.value == nodeB.value and self.props == nodeB.props:
+            if self.children is not None:
+                for i in range(len(self.children)):
+                    if self.children[i] != nodeB.children[i]:
+                        return False
             return True
         return False
     

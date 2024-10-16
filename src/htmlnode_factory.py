@@ -32,11 +32,24 @@ class HTMLNodeFactory:
                 newNode = LeafNode("blockquote", textWithoutSymbols.strip())
             case "unordered_list":
                 lines = block.splitlines()
-                listItems = []
-                for line in lines:
-                    content = line[2:]
-                    listItems.append(LeafNode("li", content))
+
+                listItems = []                
+                for line in lines:    
+                    listItemNodes = util_inline.text_to_textnodes(line[2:])
+                    listItemChildren = []
+
+                    for item in listItemNodes:
+                        if item.text != "\n" and item.text != "":
+                            listItemChildren.append(util_inline.text_node_to_html_node(item))
+
+                    if len(listItemChildren) > 1:
+                        listItems.append(ParentNode("li", children=listItemChildren))
+                    else:
+                        listItems.append(LeafNode("li", value=listItemChildren[0].value))
+
                 newNode = ParentNode("ul", children=listItems)
+                print("RETURNING________________")
+                print(newNode)
             case "ordered_list":
                 lines = block.splitlines()
                 listItems = []
@@ -45,3 +58,4 @@ class HTMLNodeFactory:
                     listItems.append(LeafNode("li", content))
                 newNode = ParentNode("ol", children=listItems)
         return newNode
+    
