@@ -13,18 +13,19 @@ class HTMLNodeFactory:
                 textNodes = util_inline.text_to_textnodes(block)
                 htmlNodes = []
                 for textNode in textNodes:
-                    htmlNodes.append(util_inline.text_node_to_html_node(textNode))
-
-                if len(htmlNodes) > 1:
+                    if textNode.text != "\n" and textNode.text != "":
+                        htmlNodes.append(util_inline.text_node_to_html_node(textNode))
+                if len(htmlNodes) > 1 or (len(htmlNodes) == 1 and htmlNodes[0].tag != None):
                     newNode = ParentNode("p", children=htmlNodes)
                 else:
-                    newNode = LeafNode("p", htmlNodes[0])
+                    newNode = LeafNode("p", value=block)
             case "heading":
                 matches = re.findall(r"^#{1,6} ", block, re.M)
                 headingType = len(matches[0]) - 1
                 newNode = LeafNode(f"h{headingType}", block[len(matches[0]):])
             case "code":
-                newNode = ParentNode("pre", children=[LeafNode("code", block)])
+                code = block[3:-3]
+                newNode = ParentNode("pre", children=[LeafNode("code", code.strip())])
             case "quote":
                 textWithoutSymbols = block.replace("\n>", "")
                 textWithoutSymbols = textWithoutSymbols.replace(">", "")

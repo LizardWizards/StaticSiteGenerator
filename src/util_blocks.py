@@ -8,17 +8,16 @@ import re
 # converts a full markdown document into a single HTMLNode.
 # That single HTMLNode contains many child HTMLNode objects representing the nested elements.
 def markdown_to_html_node(markdown):
-
     blocks = markdown_to_blocks(markdown)
     childNodes = []
     for block in blocks:
         type = block_to_block_type(block)
-
-        newNode = HTMLNodeFactory.create_node(type, block)
-
-        childNodes.append(newNode)
+        if block != "" and block != "\n":
+            newNode = HTMLNodeFactory.create_node(type, block)
+            childNodes.append(newNode)
     
     divNode = ParentNode("div", children=childNodes)
+
     return divNode
 
 

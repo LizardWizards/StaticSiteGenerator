@@ -107,7 +107,7 @@ class TestUtil(unittest.TestCase):
 
     # ----------- markdown_to_html_node() ----------- #
     def test_markdown_to_html_node_heading(self):
-        expected = ParentNode("div", children=[    
+        expected = HTMLNode("div", children=[    
             HTMLNode("h1", "h1 Heading 8-)", None, None),
             HTMLNode("h2", "h2 Heading", None, None),
             HTMLNode("h3", "h3 Heading", None, None),
@@ -118,6 +118,97 @@ class TestUtil(unittest.TestCase):
 
         text = "# h1 Heading 8-)\n\n## h2 Heading\n\n### h3 Heading\n\n#### h4 Heading\n\n##### h5 Heading\n\n###### h6 Heading"
 
+        actual = util_blocks.markdown_to_html_node(text)
+
+        self.assertEqual(expected, actual)
+
+    def test_markdown_to_html_node_quote(self):
+        expected = HTMLNode("div", children=[    
+            HTMLNode("blockquote", "Here's a quote More of the quote", None, None),
+        ])
+
+        text = "> Here's a quote\n> More of the quote"
+
+        actual = util_blocks.markdown_to_html_node(text)
+
+        self.assertEqual(expected, actual)
+
+    def test_markdown_to_html_node_ordred_list(self):
+        expected = HTMLNode("div", children=[    
+            HTMLNode("ol", children=[
+                HTMLNode("li", "Lorem ipsum dolor sit amet", None, None),
+                HTMLNode("li", "Consectetur adipiscing elit", None, None),
+                HTMLNode("li", "Integer molestie lorem at massa", None, None)
+            ])
+        ])
+
+        text = "1. Lorem ipsum dolor sit amet\n2. Consectetur adipiscing elit\n3. Integer molestie lorem at massa"
+
+        actual = util_blocks.markdown_to_html_node(text)
+
+        self.assertEqual(expected, actual)
+
+    def test_markdown_to_html_node_unordred_list(self):
+        expected = HTMLNode("div", children=[    
+            HTMLNode("ul", children=[
+                HTMLNode("li", "something", None, None),
+                HTMLNode("li", "something else", None, None),
+                HTMLNode("li", "another thing", None, None)
+            ])
+        ])
+
+        text = "- something\n- something else\n* another thing"
+
+        actual = util_blocks.markdown_to_html_node(text)
+
+        self.assertEqual(expected, actual)
+
+    def test_markdown_to_html_node_code(self):
+        expected = HTMLNode("div", children=[    
+            HTMLNode("pre", children=[
+                HTMLNode("code", "here's a\nmulti line\ncode block", None, None),
+            ])
+        ])
+        text = "'''\nhere's a\nmulti line\ncode block\n'''"
+
+        actual = util_blocks.markdown_to_html_node(text)
+
+        self.assertEqual(expected, actual)
+
+    def test_markdown_to_html_node_paragraph(self):
+        expected = HTMLNode("div", None, children=[    
+            HTMLNode("p", "here's some text", None, None), 
+        ])
+
+        text = "here's some text"
+
+        actual = util_blocks.markdown_to_html_node(text)
+        
+        self.assertEqual(expected, actual)
+
+    def test_markdown_to_html_node_image_link(self):
+        expected = HTMLNode("div", children=[    
+            HTMLNode("p", None, [
+                HTMLNode("img", "", None, {'src': 'https://octodex.github.com/images/minion.png', 'alt': 'Minion'}),
+                HTMLNode("img", "", None, {'src': 'https://octodex.github.com/images/stormtroopocat.jpg', 'alt': 'Stormtroopocat'})
+            ]), 
+            HTMLNode("p", None, [
+                HTMLNode("a", "link text", None, {'href': 'https://github.com/LizardWizards/'}),
+            ]),           
+        ])
+
+        text = "![Minion](https://octodex.github.com/images/minion.png)\n![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg)\n\n[link text](https://github.com/LizardWizards/)"
+
+        '''
+        HTMLNode(div, None, [
+            HTMLNode(p, None, [
+                HTMLNode(img, , None, {'src': 'https://octodex.github.com/images/minion.png', 'alt': 'Minion'}), 
+                HTMLNode(img, , None, {'src': 'https://octodex.github.com/images/stormtroopocat.jpg', 'alt': 'Stormtroopocat'})
+            , None), 
+            HTMLNode(p, None, [
+                HTMLNode(a, link text, None, {'href': 'https://github.com/LizardWizards/'})
+            ], None)], None)
+        '''
         actual = util_blocks.markdown_to_html_node(text)
 
         self.assertEqual(expected, actual)
