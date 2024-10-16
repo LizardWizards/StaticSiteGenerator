@@ -6,7 +6,6 @@ import util_inline
 import re
 
 class HTMLNodeFactory:
-
     def create_node(type, block):
         match type:
             case "paragraph":
@@ -24,7 +23,11 @@ class HTMLNodeFactory:
                 headingType = len(matches[0]) - 1
                 newNode = LeafNode(f"h{headingType}", block[len(matches[0]):])
             case "code":
-                code = block[3:-3]
+                code = None
+                if block[0:3] == "```" and block [-3:] == "```":
+                    code = block[3:-3]
+                else:
+                    code = block[1:-1]
                 newNode = ParentNode("pre", children=[LeafNode("code", code.strip())])
             case "quote":
                 textWithoutSymbols = block.replace("\n>", "")
@@ -48,14 +51,22 @@ class HTMLNodeFactory:
                         listItems.append(LeafNode("li", value=listItemChildren[0].value))
 
                 newNode = ParentNode("ul", children=listItems)
-                print("RETURNING________________")
-                print(newNode)
             case "ordered_list":
                 lines = block.splitlines()
                 listItems = []
                 for line in lines:
-                    content = line[3:]
-                    listItems.append(LeafNode("li", content))
+                    listItemNodes = util_inline.text_to_textnodes(line[3:])
+                    listItemChildren = []
+
+                    for item in listItemNodes:
+                        if item.text != "\n" and item.text != "":
+                            listItemChildren.append(util_inline.text_node_to_html_node(item))
+
+                    if len(listItemChildren) > 1:
+                        listItems.append(ParentNode("li", children=listItemChildren))
+                    else:
+                        listItems.append(LeafNode("li", value=listItemChildren[0].value))
+
                 newNode = ParentNode("ol", children=listItems)
         return newNode
     

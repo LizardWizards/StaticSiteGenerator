@@ -12,8 +12,6 @@ def markdown_to_html_node(markdown):
     childNodes = []
     for block in blocks:
         type = block_to_block_type(block)
-        print("block:")
-        print(block)
         if block != "" and block != "\n":
             newNode = HTMLNodeFactory.create_node(type, block)
             childNodes.append(newNode)
@@ -55,7 +53,8 @@ def is_heading(block):
     return False
 
 def is_code(block):
-    if len(block) >= 7 and block[0:3] == "'''" and block[-3:] == "'''":
+    block = block.strip()
+    if len(block) >= 7 and block[0:3] == "```" and block[-3:] == "```":
         return True
     return False
 

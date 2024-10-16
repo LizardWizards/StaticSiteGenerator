@@ -10,8 +10,35 @@ public_dir = "./public"
 static_dir = "./static"
 def main():
     copy_static_to_public()
-    generate_page("./content/index.md", "./template.html", "./public/index.html")
-   
+    #generate_page("./content/index.md", "./template.html", "./public/index.html")
+    generate_pages_recursive("./content", "./template.html", "./public")
+
+# crawls every entry in the content directory and generates a new .html file for each markdown file found
+# writes generated pages to the pulic directory
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    dir_entries = os.listdir(dir_path_content)
+
+    for entry in dir_entries:
+        from_path = os.path.join(dir_path_content, entry)
+        to_path = os.path.join(dest_dir_path, entry)
+        if(os.path.isdir(from_path)):
+            new_dir = os.path.join(dest_dir_path, entry)
+            
+            os.mkdir(new_dir)
+
+            dir_entries = os.listdir(from_path)
+            # for each thing in this directory, copy_files(thing)
+            for entry in dir_entries:
+                generate_pages_recursive(from_path, template_path, to_path)
+
+        # if this is a file, copy it
+        if(os.path.isfile(from_path)):
+            html_version = entry[:-2]
+            html_version += "html"
+            new_file = os.path.join(dest_dir_path, html_version)
+            generate_page(from_path, template_path, new_file)
+
+
 # pulls the h1 header from the markdown file and reurns it
 def extract_title(markdown):
     docNode = util_blocks.markdown_to_html_node(markdown)
