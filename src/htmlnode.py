@@ -1,5 +1,4 @@
 class HTMLNode:
-
     '''
     tag - A string representing the HTML tag name (e.g. "p", "a", "h1", etc.)
     value - A string representing the value of the HTML tag (e.g. the text inside a paragraph)

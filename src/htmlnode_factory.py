@@ -68,5 +68,4 @@ class HTMLNodeFactory:
                         listItems.append(LeafNode("li", value=listItemChildren[0].value))
 
                 newNode = ParentNode("ol", children=listItems)
-        return newNode
-    
+        return newNode 

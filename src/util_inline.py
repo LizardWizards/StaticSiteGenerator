@@ -12,9 +12,8 @@ text_to_html = {
     "text_type_image" : ("img", {"url": "src", "text": "alt"}),
 }
 
-'''
-Converts a raw string of markdown-flavored text into a list of TextNode objects
-'''
+
+# Converts a raw string of markdown-flavored text into a list of TextNode objects
 def text_to_textnodes(text):
    
     first_node = TextNode(text, "text_type_text")

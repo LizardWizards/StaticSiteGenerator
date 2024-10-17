@@ -1,6 +1,3 @@
-from leafnode import LeafNode
-from textnode import TextNode
-from htmlnode import HTMLNode
 from parentnode import ParentNode
 from htmlnode_factory import HTMLNodeFactory
 import re
@@ -19,7 +16,6 @@ def markdown_to_html_node(markdown):
     divNode = ParentNode("div", children=childNodes)
 
     return divNode
-
 
 # separates lines of markdown into blocks
 def markdown_to_blocks(markdown):

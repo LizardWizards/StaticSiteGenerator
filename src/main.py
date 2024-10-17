@@ -1,7 +1,3 @@
-from textnode import TextNode
-from parentnode import ParentNode
-from leafnode import LeafNode
-import util_inline
 import util_blocks
 import os
 import shutil
@@ -10,7 +6,6 @@ public_dir = "./public"
 static_dir = "./static"
 def main():
     copy_static_to_public()
-    #generate_page("./content/index.md", "./template.html", "./public/index.html")
     generate_pages_recursive("./content", "./template.html", "./public")
 
 # crawls every entry in the content directory and generates a new .html file for each markdown file found
